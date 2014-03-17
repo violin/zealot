@@ -1,0 +1,90 @@
+$def with (tables)
+<html>
+<head>
+	<link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/dashboard.css">
+
+	<script src="../static/bootstrap/js/jquery-1.7.1.min.js"></script>
+	<script src="../static/bootstrap/js/bootstrap.min.js"></script>
+	<title></title>
+</head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><strong>Zealot.</strong> a useful db-tool</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+          	<li><a href="#">node</a></li>
+          	<li><a href="#">node</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+	</div>
+
+     <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <input id="search_filter" type="text" class="form-control" style="margin:5px 0px;width:150px" placeholder="Search...">
+          <ul id="dbTables" class="nav nav-sidebar">
+          	$for node in tables:
+          		<li><a class="table_node" href="#">$node</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 id="board_table_name" class="page-header">Dashboard</h1>
+          <div class="input-group">
+	          <input id="query" type="text" class="form-control" placeholder="查询条件，可以不输(全匹配)' ,输入举例：'id=1';'id=1 and name='abc'">
+		      <span class="input-group-btn" >
+		        <button id="go" class="btn btn-default" style="width:150px" type="button">Go!</button>
+		      </span>
+		  </div>
+          <div class="table-responsive">
+            <table id="dbRows" class="table table-striped">
+              <thead>
+                <tr id="result_col">
+                  <th>#</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                </tr>
+              </thead>
+              <tbody id="result_col_value">
+                <tr>
+                  <td>1,001</td>
+                  <td>Lorem</td>
+                  <td>ipsum</td>
+                  <td>dolor</td>
+                  <td>sit</td>
+                </tr>
+                <tr>
+                  <td>1,002</td>
+                  <td>amet</td>
+                  <td>consectetur</td>
+                  <td>adipiscing</td>
+                  <td>elit</td>
+                </tr>
+            </tbody>
+        </table>
+          </div>
+        </div>
+    </div>
+    </div>
+
+
+  
+  </body>
+  	<script src="../static/dashboard.js"></script>
+</html>
