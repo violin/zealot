@@ -9,7 +9,8 @@ urls = (
     '/', 'index',
     '/json/(.*)/', 'DataProvider',
     '/static/(.*)', 'StaticProvider',
-    '/query', 'QueryProvider'
+    '/query', 'QueryProvider',
+    '/showCreate', 'TableMetaProvider'
 )
 tables = []
 
@@ -17,10 +18,22 @@ class QueryProvider:
     def POST(self):
         data = web.input()
         print data.condition
-        values = db.queryAll(data.tableName, data.condition)
-        cols = db.getColumns(data.tableName)
+        if data.queryType == 'where':
+            values = db.queryAll(data.tableName, data.condition)
+            cols = db.getColumns(data.tableName)
+        elif data.queryType == 'full':
+            cols = []
+            values = db.execQuery(data.condition)
         returnMap = {"v":values,"k":cols}
         return json.dumps(returnMap)
+    def GET(self,param):
+        return param
+
+class TableMetaProvider:
+    def POST(self):
+        data = web.input()
+        result = db.execQuery("show create table "+ data.tableName)
+        return json.dumps(result)
     def GET(self,param):
         return param
 

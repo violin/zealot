@@ -2,6 +2,8 @@
 	//初始化
 	var tablename;
 	var tables=[];
+	var querytype='where';
+
 	$("#dbTables>li>a").each(function (){
 		tables.push($(this).html())
 	})
@@ -31,11 +33,42 @@
 		};
 		bindItem();
 	})
+	//绑定查询表结构
+	$("#show_create").hover(function(){
+		$.post("showCreate",{tableName:tablename},function(result){
+			str = $.parseJSON(result)
+			var content = "<div style='width:600px'>" + str[0] +"</div>";
+			content = content.replace(tablename+',','')
+			content =content.replace(/\n/g,'<br>')
+			$('#show_create').attr("data-original-title",content)
+			$('#show_create').tooltip({html:true,trigger:'hover'})
+		})
+	})
+	//绑定查询方式按钮
+	$(".query_type").click(function(){
+		$("#query_type").html($(this).html()+"<span class='caret'></span>");
+		if ($(this).html() == "完整sql") {
+			querytype='full';
+			$("#query").attr("placeholder",'输入完整sql语句')
+		};
+		if ($(this).html() == "where条件") {
+			querytype='where';
+			$("#query").attr("placeholder","查询条件，可以不输(全匹配)' ,输入举例：'id=1';'id=1 and name='abc'")
+		};
+		
+	})
+
+	//绑定查询框
+	$("#query").keyup(function(e){
+		if (e.keyCode == 13) {
+			$("#go").click();
+		};
+	})
 
 	//绑定查询按钮 go
 	$("#go").click(function(){
 		var query = $("#query").val();
-		$.post("query",{tableName:tablename,condition:query},function(result){
+		$.post("query",{tableName:tablename,condition:query,queryType:querytype},function(result){
 	    	data = $.parseJSON(result)
 	    	head = data.k
 	    	value = data.v

@@ -38,6 +38,21 @@ def queryAll(tableName,condition='1=1',start=0,offset=100):
         cur.close()
         conn.close()
 
+def execQuery(fullQuery):
+    try:
+        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
+        cur=conn.cursor()
+        cur.execute(fullQuery)
+        results=[]
+        for row in cur.fetchall():
+            results.append(row)
+        return results
+    except MySQLdb.Error,e:
+         print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+    finally:
+        cur.close()
+        conn.close()
+
 def getColumns(tableName):
     try:
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
