@@ -45,6 +45,8 @@ def execQuery(fullQuery):
         print fullQuery
         cur.execute(fullQuery)
         results=[]
+        if fullQuery.find('insert')>=0 or fullQuery.find('update')>=0 or fullQuery.find('delete')>=0:
+            conn.commit()
         for row in cur.fetchall():
             results.append(row)
         return results
@@ -83,10 +85,4 @@ def getColumns(tableName):
 
 
 if __name__ == '__main__':
-    tables = initTables()
-    rows = getColumns(tables[0])
-    # print rows
-    for x in rows:
-        print x
-    # for x in range(0,len(rows.split('\n'))) 
-    #     println rows.split('\n')[x]
+    execQuery('update AnswerForm set correctNum =3 where id = 374001;')
