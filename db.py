@@ -42,6 +42,7 @@ def execQuery(fullQuery):
     try:
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
+        print fullQuery
         cur.execute(fullQuery)
         results=[]
         for row in cur.fetchall():
