@@ -1,6 +1,7 @@
 import MySQLdb
 import config
 import json
+import decimal
 
 
 def initTables(): 
@@ -30,7 +31,13 @@ def queryAll(tableName,condition='1=1',start=0,offset=100):
         cur.execute(query)
         results=[]
         for row in cur.fetchall():
-            results.append(row)
+            newrow = []
+            for x in row:
+                if isinstance(x, decimal.Decimal):
+                    newrow.append(decimal.Decimal.to_eng_string(x))
+                else:
+                    newrow.append(x)
+            results.append(newrow)
         return results
     except MySQLdb.Error,e:
          print "Mysql Error %d: %s" % (e.args[0], e.args[1])
@@ -85,4 +92,4 @@ def getColumns(tableName):
 
 
 if __name__ == '__main__':
-    execQuery('update AnswerForm set correctNum =3 where id = 374001;')
+    print queryAll("moc_test_answerform")
