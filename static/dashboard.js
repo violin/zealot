@@ -68,7 +68,12 @@
 	//绑定查询按钮 go
 	$("#go").click(function(){
 		var query = $("#query").val();
-		$.post("query",{tableName:tablename,condition:query,queryType:querytype},function(result){
+		queryWhere(query,null);
+		
+	})
+
+	function queryWhere(query,orderCondition){
+		$.post("query",{tableName:tablename,condition:query,queryType:querytype,orderCondition:orderCondition},function(result){
 	    	data = $.parseJSON(result)
 	    	head = data.k
 	    	value = data.v
@@ -76,7 +81,7 @@
 	    	var cParent = $("#result_col")
 	    	cParent.empty()
 	    	for (var i = 0; i < head.length; i++) {
-	    		var th = $("<th>"+head[i]+"</th>")
+	    		var th = $("<th data="+head[i]+">"+head[i]+ "<br><span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-up order-up'></span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-down order-down'></span></span></th>")
 	    		cParent.append(th)
 	    	}
 	    	//process v
@@ -92,6 +97,20 @@
 	    		}
 	    		parent.append(tr)
 	    	}
+	    	bindOrderClick();
 	  	});
-	})
+	}
+
+	function bindOrderClick(){
+		var query = $("#query").val();
+		$(".order-up").click(function(){
+			var col = $(this).parent().parent().attr('data')
+			queryWhere(query,col + ' asc');
+		});	
+		$(".order-down").click(function(){
+			var col = $(this).parent().parent().attr('data')
+			queryWhere(query,col + ' desc');
+		});	
+
+	}
 

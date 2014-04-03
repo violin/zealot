@@ -19,7 +19,7 @@ class QueryProvider:
         data = web.input()
         print data.condition
         if data.queryType == 'where':
-            values = db.queryAll(data.tableName, data.condition)
+            values = db.queryAll(data.tableName, data.condition, data.orderCondition)
             cols = db.getColumns(data.tableName)
         elif data.queryType == 'full':
             cols = []

@@ -20,13 +20,15 @@ def initTables():
         cur.close()
         conn.close()
 
-def queryAll(tableName,condition='1=1',start=0,offset=100):
+def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=100):
     try:
         if condition == None or len(condition.strip())==0:
             condition='1=1'
+        if orderCondition == None or len(orderCondition.strip())==0 or orderCondition== 'null':
+            orderCondition='id desc'
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
-        query = 'select * from ' + tableName +' where ' + condition +' limit ' +str(start) + ','+str(offset)
+        query = 'select * from ' + tableName +' where ' + condition +' order by '+orderCondition +' limit ' +str(start) + ','+str(offset)
         print query
         cur.execute(query)
         results=[]
