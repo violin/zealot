@@ -2,7 +2,9 @@
 	//初始化
 	var tablename;
 	var tables=[];
+	var columnNames=[];
 	var querytype='where';
+	var currentMode ='view'
 
 	$("#dbTables>li>a").each(function (){
 		tables.push($(this).html())
@@ -17,6 +19,9 @@
 	    	cParent.empty()
 	    	var parent = $("#result_col_value")
 	    	parent.empty()
+	    	$("#view_mode").attr('mode','view')
+	    	$("#view_mode").html('查看模式')
+	    	queryWhere("",null,false)
 		})
 	}
 	bindItem();
@@ -43,6 +48,19 @@
 			$('#show_create').attr("data-original-title",content)
 			$('#show_create').tooltip({html:true,trigger:'hover'})
 		})
+	})	
+	//绑定编辑模式
+	$("#view_mode").click(function(){
+		if (currentMode=='view') {
+			$(this).attr('mode','edit')
+			$(this).html('编辑模式')
+			queryWhere(null,null,true)
+		}else{
+			$(this).attr('mode','view')
+			$(this).html('查看模式')
+			queryWhere(null,null,false)
+		}
+		currentMode = $(this).attr('mode')
 	})
 	//绑定查询方式按钮
 	$(".query_type").click(function(){
@@ -67,12 +85,21 @@
 
 	//绑定查询按钮 go
 	$("#go").click(function(){
-		var query = $("#query").val();
-		queryWhere(query,null);
-		
+		queryWhere(null,null,false);
 	})
 
-	function queryWhere(query,orderCondition){
+	function bindDeleteButton(){
+		//绑定删除按钮 go
+		$(".rowDelete").click(function(){
+			var deletequery = 'delete from '+tablename+' where id = '+$(this).attr('dataid')+';'
+			execQuery(deletequery)
+		})
+	}
+
+	function queryWhere(query,orderCondition,isEdit){
+		if (query == null) {
+		    query = $("#query").val();
+		}
 		$.post("query",{tableName:tablename,condition:query,queryType:querytype,orderCondition:orderCondition},function(result){
 	    	data = $.parseJSON(result)
 	    	head = data.k
@@ -80,6 +107,11 @@
 	    	//process k
 	    	var cParent = $("#result_col")
 	    	cParent.empty()
+	    	if (isEdit) {
+		    	var actionth = $("<th ><span>操作</span></th>")
+		    	cParent.append(actionth)
+	    	}
+	    	columnNames = head
 	    	for (var i = 0; i < head.length; i++) {
 	    		var th = $("<th data="+head[i]+">"+head[i]+ "<br><span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-up order-up'></span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-down order-down'></span></span></th>")
 	    		cParent.append(th)
@@ -92,24 +124,34 @@
 	    		var arr = value[i]
 	    		for(var j = 0; j < arr.length; j++){
 	    			var col = arr[j]
+	    			if (columnNames[j]=='id' && isEdit) {
+	    				var actiontd = $("<td><button type='button' class='btn btn-primary rowUpdate' dataid="+col+">U</button><button type='button' class='btn btn-danger rowDelete' dataid="+col+">D</button></td>")
+	    				tr.append(actiontd)
+	    			}
 	    			var td = $("<td>"+col+"</td>")
 	    			tr.append(td)
 	    		}
 	    		parent.append(tr)
 	    	}
+
 	    	bindOrderClick();
+	    	bindDeleteButton();
 	  	});
+	}
+	function execQuery(query){
+		$.post("query",{condition:query,queryType:'full'},function(result){
+			queryWhere(null,null,false);
+		});
 	}
 
 	function bindOrderClick(){
-		var query = $("#query").val();
 		$(".order-up").click(function(){
 			var col = $(this).parent().parent().attr('data')
-			queryWhere(query,col + ' asc');
+			queryWhere(null,col + ' asc',currentMode=='edit');
 		});	
 		$(".order-down").click(function(){
 			var col = $(this).parent().parent().attr('data')
-			queryWhere(query,col + ' desc');
+			queryWhere(null,col + ' desc',currentMode=='edit');
 		});	
 
 	}

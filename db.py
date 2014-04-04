@@ -20,7 +20,7 @@ def initTables():
         cur.close()
         conn.close()
 
-def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=100):
+def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=30):
     try:
         if condition == None or len(condition.strip())==0:
             condition='1=1'
