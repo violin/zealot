@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*- 
+
 import MySQLdb
 import config
 import json
@@ -52,7 +55,7 @@ def execQuery(fullQuery):
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
         print fullQuery
-        cur.execute(fullQuery)
+        cur.execute(fullQuery.encode('utf-8'))
         results=[]
         if fullQuery.find('insert')>=0 or fullQuery.find('update')>=0 or fullQuery.find('delete')>=0:
             conn.commit()
@@ -94,4 +97,4 @@ def getColumns(tableName):
 
 
 if __name__ == '__main__':
-    print queryAll("moc_test_answerform")
+    execQuery("update Board set change_text='在' where id = 64001;")

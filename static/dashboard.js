@@ -98,7 +98,8 @@
 			if (currentMode=='edit') {
 				$(this).attr('mode','view')
 				$(this).html('查看模式')
-				currentMode = $(this).attr('mode')
+				currentMode = $(this)
+				.attr('mode')
 			}
 		})
 	}

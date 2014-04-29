@@ -1,9 +1,13 @@
 #!/usr/bin/python
-#coding=utf-8   
+# -*- coding: utf-8 -*-  
 
 import web
 import db
 import json
+import sys,os
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 urls = (
     '/', 'index',
