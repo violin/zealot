@@ -88,11 +88,36 @@
 		queryWhere(null,null,false);
 	})
 
+	//绑定删除按钮D 
 	function bindDeleteButton(){
-		//绑定删除按钮 go
 		$(".rowDelete").click(function(){
+			//加个确认按钮？TODO
 			var deletequery = 'delete from '+tablename+' where id = '+$(this).attr('dataid')+';'
 			execQuery(deletequery)
+			queryWhere(null,null,false);
+			if (currentMode=='edit') {
+				$(this).attr('mode','view')
+				$(this).html('查看模式')
+				currentMode = $(this).attr('mode')
+			}
+		})
+	}
+	//绑定update按钮U
+	function bindUpdateButton(){
+		$(".rowUpdate").keyup(function(e){
+			if (e.keyCode == 13) {
+				var currentValue =$(this).attr('value')
+				currentValue=currentValue.replace(/"/g,"\\\"")
+				currentValue=currentValue.replace(/'/g,"\\'")
+				var updatequery = 'update '+tablename+ ' set ' +$(this).attr('columnname') +"='" +currentValue+"' where id = "+$(this).attr('dataid')+';'
+				execQuery(updatequery)
+				queryWhere(null,null,false);
+				if (currentMode=='edit') {
+					$(this).attr('mode','view')
+					$(this).html('查看模式')
+					currentMode = $(this).attr('mode')
+				}
+			};
 		})
 	}
 
@@ -108,7 +133,7 @@
 	    	var cParent = $("#result_col")
 	    	cParent.empty()
 	    	if (isEdit) {
-		    	var actionth = $("<th ><span>操作</span></th>")
+		    	var actionth = $("<th><span style='display:block;width:50px'>删除</span></th>")
 		    	cParent.append(actionth)
 	    	}
 	    	columnNames = head
@@ -125,10 +150,15 @@
 	    		for(var j = 0; j < arr.length; j++){
 	    			var col = arr[j]
 	    			if (columnNames[j]=='id' && isEdit) {
-	    				var actiontd = $("<td><button type='button' class='btn btn-primary rowUpdate' dataid="+col+">U</button><button type='button' class='btn btn-danger rowDelete' dataid="+col+">D</button></td>")
+	    				var dataid = col
+	    				var actiontd = $("<td><button type='button' class='btn btn-danger rowDelete' dataid="+col+">D</button></td>")
 	    				tr.append(actiontd)
 	    			}
-	    			var td = $("<td>"+col+"</td>")
+	    			if (isEdit) {
+	    				var td = $("<td>"+"<input type='text' class='form-control rowUpdate' dataid='"+dataid+"' columnName='"+columnNames[j]+"' value='"+col+"'>"+"</td>")
+	    			}else{
+	    				var td = $("<td>"+col+"</td>")
+	    			}
 	    			tr.append(td)
 	    		}
 	    		parent.append(tr)
@@ -136,6 +166,7 @@
 
 	    	bindOrderClick();
 	    	bindDeleteButton();
+	    	bindUpdateButton();
 	  	});
 	}
 	function execQuery(query){
