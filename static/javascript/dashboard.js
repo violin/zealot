@@ -174,7 +174,9 @@
 	  	});
 	}
 	function execQuery(query){
+		window.Util._$showLoading();
 		$.post("query",{condition:query,queryType:'full'},function(result){
+			window.Util._$hideLoading();
 			queryWhere(null,null,false);
 		});
 	}
