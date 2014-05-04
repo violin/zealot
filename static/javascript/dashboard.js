@@ -4,11 +4,11 @@
 	var tables=[];
 	var columnNames=[];
 	var querytype='where';
-	var currentMode ='view'
+	var currentMode ='view';
 
 	$("#dbTables>li>a").each(function (){
 		tables.push($(this).html())
-	})
+	});
 
 	//绑定表名的点击
 	function bindItem(){
@@ -126,7 +126,10 @@
 		if (query == null) {
 		    query = $("#query").val();
 		}
+		window.Util._$showLoading();
 		$.post("query",{tableName:tablename,condition:query,queryType:querytype,orderCondition:orderCondition},function(result){
+			window.Util._$hideLoading();
+
 	    	data = $.parseJSON(result)
 	    	head = data.k
 	    	value = data.v
