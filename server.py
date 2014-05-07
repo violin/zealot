@@ -5,17 +5,27 @@ import web
 import db
 import json
 import sys,os
+import openid
+import tempfile
+from openid import REDIRECT_URL
 reload(sys)
 sys.setdefaultencoding('utf8')
-
 
 urls = (
     '/', 'index',
     '/json/(.*)/', 'DataProvider',
+    '/auth/?(.*)', 'AuthProvider',
     '/static/(.*)', 'StaticProvider',
     '/query', 'QueryProvider',
     '/showCreate', 'TableMetaProvider'
 )
+app = web.application(urls, globals())
+root = tempfile.mkdtemp()
+if web.config.get('_session') is None:
+     session = web.session.Session(app, web.session.DiskStore(root),initializer={'fullname':''})
+     web.config._session = session
+else:
+     session = web.config._session
 tables = []
 
 class QueryProvider:
@@ -44,6 +54,13 @@ class TableMetaProvider:
 class DataProvider:
     def GET(self,param):
         return param
+    
+class AuthProvider:
+    def GET(self,param):
+        url =  web.ctx.env['QUERY_STRING']
+        auth = openid.getAuth(url)
+        session['fullname']=auth['fullname']
+        web.redirect("/")
 
 class StaticProvider:
     def GET(self,param):
@@ -51,11 +68,16 @@ class StaticProvider:
 
 class index:
     def GET(self):
+        fullname = session['fullname'] 
+        if session is not None:
+            if fullname== '':
+                web.redirect(REDIRECT_URL)
+            else:
+                print 'welcome,'+fullname
         render = web.template.render('html/')
         tables=db.initTables()
-        return render.index(tables)
+        return render.index(tables=tables,fullname=fullname)
 
 
 if __name__ == "__main__":
-    app = web.application(urls, globals())
     app.run()
