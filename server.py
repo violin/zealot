@@ -8,6 +8,7 @@ import sys,os
 import openid
 import tempfile
 from openid import REDIRECT_URL
+from compiler.pycodegen import EXCEPT
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -58,8 +59,11 @@ class DataProvider:
 class AuthProvider:
     def GET(self,param):
         url =  web.ctx.env['QUERY_STRING']
-        auth = openid.getAuth(url)
-        session['fullname']=auth['fullname']
+        try:
+            auth = openid.getAuth(url)
+            session['fullname']=auth['fullname']
+        except Exception,e:
+            print "auth error:"+e
         web.redirect("/")
 
 class StaticProvider:
