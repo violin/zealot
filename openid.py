@@ -100,21 +100,24 @@ def getAuth(QUERY):
     if OPENID_RESPONSE['openid.mode'] != 'id_res':
         #一定是出错了，成功认证返回的openid.mode一定是id_res
         print u"openid.mode 不是 id_res"
-        sys.exit(1)
+        return {}
     if OPENID_RESPONSE['openid.assoc_handle'] != ASSOC['assoc_handle']:
         # 可能consumer没有assoc或者OpenID Server不认可之前的association handle
         #  （如果你已经做了associate并且assoc_handle是一致的话
         # 那么不允许做check_authentication操作，一定会返回False ）
         if not check_authentication( OPENID_RESPONSE, idp = "https://login.netease.com/openid/" ):
             print u"assoc_handle不一致，check_authentication不成功"
-            sys.exit(1)
+            return {}
         else:
             print u"assoc_handle不一致，check_authentication成功"
             print u"恭喜您，成功完成OpenID认证"
-            print "nickname: %s" % OPENID_RESPONSE.get('openid.sreg.nickname', None)
-            print "email: %s" % OPENID_RESPONSE.get('openid.sreg.email', None)
-            print "fullname: %s" % OPENID_RESPONSE.get('openid.sreg.fullname', None)
-            sys.exit(0)
+            auth={
+              "nickname":OPENID_RESPONSE.get('openid.sreg.nickname', None),
+              "email":OPENID_RESPONSE.get('openid.sreg.email', None),
+              "fullname":OPENID_RESPONSE.get('openid.sreg.fullname', None)
+              }
+            print auth
+            return auth
 
     print u"OpenID Server返回的签名值: %s" % OPENID_RESPONSE['openid.sig']
     #构造需要检查签名的内容
@@ -135,7 +138,7 @@ def getAuth(QUERY):
 
     if SIGNED_CONTENT_SIG != OPENID_RESPONSE['openid.sig']:
         print u"签名错误，认证不成功"
-        sys.exit(1)
+        return {}
 
     print u"恭喜您，成功完成OpenID认证"
     auth={
