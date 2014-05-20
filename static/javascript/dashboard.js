@@ -15,12 +15,12 @@
     function chang_page(event) { 
         // if (event.keyCode == 37 || event.keyCode == 38) location = '<MTEntryPrevious><$MTEntryPermalink$></MTEntryPrevious>'; 
         // if (event.keyCode == 39 || event.keyCode == 40) location = '<MTEntryNext><$MTEntryPermalink$></MTEntryNext>' 
-
-        for (var i = 0; i < window.winkeyCodeData.length; i++) {
-        	if (event.keyCode == window.winkeyCodeData[i].key){
-				$("#"+window.winkeyCodeData[i].id).focus();
-			}
-        };
+    //快捷键禁用
+   //      for (var i = 0; i < window.winkeyCodeData.length; i++) {
+   //      	if (event.keyCode == window.winkeyCodeData[i].key){
+			// 	$("#"+window.winkeyCodeData[i].id).focus();
+			// }
+   //      };
     } 
 	//绑定表名的点击
 	function bindItem(){
@@ -40,7 +40,7 @@
 
 	//绑定筛选框
 	$("#search_filter").keyup(function(event) {
-		if (event.keyCode == 13) {
+		//if (event.keyCode == 13) {
 			var tbKeyword = $(this).val();
 			$("#dbTables").empty();
 			for (var i = 0; i < tables.length; i++) {
@@ -50,7 +50,9 @@
 				}; 
 			};
 			bindItem();
-		}else{
+		//}else{
+
+			//快捷键注册
 			if(!!window.domkeyCodeData['search_filter']){
 				var keyArr = window.domkeyCodeData['search_filter'];
 				for (var i = 0; i < keyArr.length; i++) {
@@ -59,7 +61,7 @@
 					}
 				};
 			}
-		};
+		//};
 			
 		
 	})

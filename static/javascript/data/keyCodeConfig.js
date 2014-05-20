@@ -1,9 +1,5 @@
 window.winkeyCodeData = [
-    {
-    	key:83,
-    	id :'search_filter'//搜索id
-    	
-    }
+    
 ];
 window.domkeyCodeData = {
 	"search_filter":[
