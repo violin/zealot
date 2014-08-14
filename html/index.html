@@ -49,6 +49,7 @@ $def with (tables,fullname,target)
             <a id="show_create" href="#" data-placement="bottom"  class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 50px" role="button">查看表结构</a>
             $if target.find('online')<0 and target.find('prod')<0:
             	<a id="view_mode" href="#" data-placement="bottom" mode='view' class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 20px" role="button">查看模式</a>
+            	<a href="#inserModal" class="btn btn-large btn-info" type="button" id="insertBtn" data-toggle="modal" style="display:none;margin-bottom:5px;">插 入</a>
           <!--  <a id="insert_table" href="#" data-placement="bottom"  class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 20px" role="button">插入</a> -->
           </h4>
           
@@ -65,6 +66,7 @@ $def with (tables,fullname,target)
 		        <button id="go" class="btn btn-default" style="width:150px" type="button">Go!</button>
 		      </span>
 		  </div>
+
           <div class="table-responsive" style="margin-top: 10px">
             <table id="dbRows" class="table table-striped">
               <thead>
@@ -98,7 +100,20 @@ $def with (tables,fullname,target)
     </div>
     </div>
 
-
+    <!-- insert Modal -->
+    <div id="inserModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <p>One fine body…</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+        <button class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
   
   </body>
   	<script src="../static/javascript/dashboard.js"></script>
