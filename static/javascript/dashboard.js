@@ -66,7 +66,7 @@
 		
 	})
 	//绑定查询表结构
-	$("#show_create").hover(function(){
+	$("#show_create").click(function(){
 		$.post("showCreate",{tableName:tablename},function(result){
 			str = $.parseJSON(result)
 			var content = "<div style='width:600px'>" + str[0] +"</div>";
