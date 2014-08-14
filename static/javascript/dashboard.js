@@ -81,10 +81,12 @@
 		if (currentMode=='view') {
 			$(this).attr('mode','edit')
 			$(this).html('编辑模式')
+			$("#insertBtn").show();
 			queryWhere(null,null,true)
 		}else{
 			$(this).attr('mode','view')
 			$(this).html('查看模式')
+			$("#insertBtn").hide();
 			queryWhere(null,null,false)
 		}
 		currentMode = $(this).attr('mode')

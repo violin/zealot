@@ -73,6 +73,7 @@ class StaticProvider:
 class index:
     def GET(self):
         fullname = session['fullname'] 
+        fullname = "mock"
         if session is not None:
             if fullname== '':
                 web.redirect(REDIRECT_URL)
