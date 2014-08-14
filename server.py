@@ -9,7 +9,7 @@ import openid
 import tempfile
 import ConfigParser
 from whitelist import *
-from openid import REDIRECT_URL
+import openid 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -34,6 +34,7 @@ tables = []
 configParsed=False
 
 #处理参数
+
 if not configParsed and len(sys.argv) >3 and sys.argv[2].find("config:") >=0 and sys.argv[3].find("target:") >=0:
     global db_host,db_port,db_user,db_passwd,db_database,need_login,target
     configFileName=sys.argv[2][8:]
@@ -102,7 +103,7 @@ class index:
         if need_login and session is not None:
             fullname = web.cookies().get('fullname')
             if fullname is None or fullname=='' or fullname not in whiteList:
-                web.redirect(REDIRECT_URL)
+                web.redirect(openid.REDIRECT_URL)
                 return 
             else:
                 print 'welcome,'+fullname

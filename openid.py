@@ -24,6 +24,7 @@ import urlparse
 import hmac
 import hashlib
 import base64
+import server
 
 ASSOCIATE_DATA = {
     'openid.mode' : 'associate',
@@ -66,7 +67,7 @@ def check_authentication( request,
     is_valid = check_auth.get('is_valid', 'false')
     return is_valid_map[is_valid]
 
-
+zealot_port=sys.argv[1]
 REDIRECT_DATA = {
     'openid.ns' : 'http://specs.openid.net/auth/2.0', # 固定字符串
     'openid.mode' : 'checkid_setup', # 固定字符串
@@ -74,10 +75,10 @@ REDIRECT_DATA = {
     # 如果想偷懒，可以不做associate操作，直接将openid_assoc_handle设置为空
     # 这种情况下，OpenID Server会自动为你生成一个新的assoc_handle，你需要通过check_authentication进行数据校验
     #'openid.assoc_handle' : None,
-    'openid.return_to' : 'http://zealot.hz.netease.com:1234/auth', # 当用户在OpenID Server登录成功后，你希望它跳转回来的地址
+    'openid.return_to' : 'http://zealot.hz.netease.com:'+zealot_port+'/auth', # 当用户在OpenID Server登录成功后，你希望它跳转回来的地址
     'openid.claimed_id' : 'http://specs.openid.net/auth/2.0/identifier_select', # 固定字符串
     'openid.identity' : 'http://specs.openid.net/auth/2.0/identifier_select', # 固定字符串
-    'openid.realm' : 'http://zealot.hz.netease.com:1234/', # 声明你的身份（站点URL），通常这个URL要能覆盖openid.return_to
+    'openid.realm' : 'http://zealot.hz.netease.com:'+zealot_port+'/', # 声明你的身份（站点URL），通常这个URL要能覆盖openid.return_to
     'openid.ns.sreg' : 'http://openid.net/extensions/sreg/1.1', # 固定字符串
     # fullname为中文，如果您的环境有中文编码困扰，可以不要
     'openid.sreg.required' : "nickname,email,fullname", # 三个可以全部要求获取，或者只要求一个
