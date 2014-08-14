@@ -5,6 +5,7 @@
 	var columnNames=[];
 	var querytype='where';
 	var currentMode ='view';
+	var columnArr =[];
 
 	$("#dbTables>li>a").each(function (){
 		tables.push($(this).html())
@@ -90,6 +91,30 @@
 			queryWhere(null,null,false)
 		}
 		currentMode = $(this).attr('mode')
+	});
+	//绑定插入模式
+	$("#insertBtn").click(function(){
+		var $form = $("#modalBody"), 
+		 	htm = "";
+		for (var i = 0; i < columnArr.length; i++) {
+			htm += "<label>"+columnArr[i]+"：</label><input class='form-control newItem' type='text' "+((i==0)?'disabled':'')+">";
+		};
+		$form.html(htm);
+
+	})
+	//保存一条新纪录
+	$("#saveNewRecord").click(function(){
+		var $newValues = $(".newItem"), 
+		 	newVal = [];
+		for (var i = 1; i < $newValues.length; i++) {
+			newVal.push($.trim($newValues[i].value));
+		};
+			
+	 	//insert into [tablename] (id ,name ,,,,,) values (seq ,'lqf',x,,,,)
+	 	var insertquery = 'insert into '+tablename+' ('+columnArr.join(',')+')  values (seq , '+newVal.join(',')+');'
+		execQuery(insertquery)
+		queryWhere(null,null,false);
+
 	})
 	//绑定查询方式按钮
 	$(".query_type").click(function(){
@@ -168,6 +193,7 @@
 		$.post("query",{tableName:tablename,condition:query,queryType:querytype,orderCondition:orderCondition},function(result){
 			window.Util._$hideLoading();
 
+			columnArr = [];
 	    	data = $.parseJSON(result)
 	    	head = data.k
 	    	value = data.v
@@ -181,7 +207,8 @@
 	    	columnNames = head
 	    	for (var i = 0; i < head.length; i++) {
 	    		var th = $("<th data="+head[i]+">"+head[i]+ "<br><span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-up order-up'></span><span style='font-size:5px;cursor: pointer;' class='glyphicon glyphicon-chevron-down order-down'></span></span></th>")
-	    		cParent.append(th)
+	    		cParent.append(th);
+	    		columnArr.push(head[i]);
 	    	}
 	    	//process v
 	    	var parent = $("#result_col_value")
