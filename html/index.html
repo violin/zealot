@@ -1,4 +1,4 @@
-$def with (tables,fullname)
+$def with (tables,fullname,target)
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <head>
@@ -21,15 +21,16 @@ $def with (tables,fullname)
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><strong>Zealot.</strong> a useful db-tool</a>
+          <a class="navbar-brand" href="#"><strong>Zealot.</strong> a useful db-tool.  </a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-          	<li><a href="#">$fullname</a></li>
+          	<li><a href="#">当前环境:$target</a></li>
+          	<li><a href="#">登陆用户:[ $fullname ]</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
+          <!--<form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
-          </form>
+          </form> -->
         </div>
       </div>
 	</div>
@@ -46,7 +47,8 @@ $def with (tables,fullname)
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h4  class="page-header"><span id="board_table_name">Dashboard</span>
             <a id="show_create" href="#" data-placement="bottom"  class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 50px" role="button">查看表结构</a>
-            <a id="view_mode" href="#" data-placement="bottom" mode='view' class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 20px" role="button">查看模式</a>
+            $if target.find('online')<0 and target.find('prod')<0:
+            	<a id="view_mode" href="#" data-placement="bottom" mode='view' class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 20px" role="button">查看模式</a>
           <!--  <a id="insert_table" href="#" data-placement="bottom"  class="btn btn-primary" data-content="" style="margin-bottom:5px;margin-left: 20px" role="button">插入</a> -->
           </h4>
           

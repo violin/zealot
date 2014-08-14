@@ -35,7 +35,7 @@ configParsed=False
 
 #处理参数
 if not configParsed and len(sys.argv) >3 and sys.argv[2].find("config:") >=0 and sys.argv[3].find("target:") >=0:
-    global db_host,db_port,db_user,db_passwd,db_database,need_login
+    global db_host,db_port,db_user,db_passwd,db_database,need_login,target
     configFileName=sys.argv[2][8:]
     target=sys.argv[3][8:]
     print "use config:"+ configFileName
@@ -108,7 +108,7 @@ class index:
                 print 'welcome,'+fullname
         render = web.template.render('html/')
         tables=db.initTables()
-        return render.index(tables=tables,fullname=fullname)
+        return render.index(tables=tables,fullname=fullname,target=target)
 
 
 if __name__ == "__main__":
