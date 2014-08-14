@@ -36,3 +36,4 @@
         
     };
 })( jQuery );
+document.write("<script src='./static/javascript/data/keyCodeConfig.js'></script>");

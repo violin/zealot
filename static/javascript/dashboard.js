@@ -10,6 +10,18 @@
 		tables.push($(this).html())
 	});
 
+	// 快捷键绑定
+	document.onkeydown = chang_page; 
+    function chang_page(event) { 
+        // if (event.keyCode == 37 || event.keyCode == 38) location = '<MTEntryPrevious><$MTEntryPermalink$></MTEntryPrevious>'; 
+        // if (event.keyCode == 39 || event.keyCode == 40) location = '<MTEntryNext><$MTEntryPermalink$></MTEntryNext>' 
+    //快捷键禁用
+   //      for (var i = 0; i < window.winkeyCodeData.length; i++) {
+   //      	if (event.keyCode == window.winkeyCodeData[i].key){
+			// 	$("#"+window.winkeyCodeData[i].id).focus();
+			// }
+   //      };
+    } 
 	//绑定表名的点击
 	function bindItem(){
 		$(".table_node").click(function(){
@@ -27,16 +39,31 @@
 	bindItem();
 
 	//绑定筛选框
-	$("#search_filter").keyup(function() {
-		var tbKeyword = $(this).val();
-		$("#dbTables").empty();
-		for (var i = 0; i < tables.length; i++) {
-			if (tables[i].toUpperCase().indexOf(tbKeyword.toUpperCase())>=0) {
-				var temp = $('<li><a class="table_node" href="#">'+tables[i]+'</a></li>')
-				$("#dbTables").append(temp);
-			}; 
-		};
-		bindItem();
+	$("#search_filter").keyup(function(event) {
+		//if (event.keyCode == 13) {
+			var tbKeyword = $(this).val();
+			$("#dbTables").empty();
+			for (var i = 0; i < tables.length; i++) {
+				if (tables[i].toUpperCase().indexOf(tbKeyword.toUpperCase())>=0) {
+					var temp = $('<li><a class="table_node" href="#">'+tables[i]+'</a></li>')
+					$("#dbTables").append(temp);
+				}; 
+			};
+			bindItem();
+		//}else{
+
+			//快捷键注册
+			if(!!window.domkeyCodeData['search_filter']){
+				var keyArr = window.domkeyCodeData['search_filter'];
+				for (var i = 0; i < keyArr.length; i++) {
+					if(event.keyCode == keyArr[i].key){
+						$("#"+keyArr[i].id).focus();
+					}
+				};
+			}
+		//};
+			
+		
 	})
 	//绑定查询表结构
 	$("#show_create").hover(function(){
@@ -80,6 +107,15 @@
 	$("#query").keyup(function(e){
 		if (e.keyCode == 13) {
 			$("#go").click();
+		}else{
+			if(!!window.domkeyCodeData['query']){
+				var keyArr = window.domkeyCodeData['query'];
+				for (var i = 0; i < keyArr.length; i++) {
+					if(event.keyCode == keyArr[i].key){
+						$("#"+keyArr[i].id).focus();
+					}
+				};
+			}
 		};
 	})
 
