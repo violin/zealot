@@ -7,8 +7,9 @@ import json
 import sys,os
 import openid
 import tempfile
+import ConfigParser
+from whitelist import *
 from openid import REDIRECT_URL
-from compiler.pycodegen import EXCEPT
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -27,8 +28,32 @@ if web.config.get('_session') is None:
      web.config._session = session
 else:
      session = web.config._session
+     
+# 全局变量     
 tables = []
+configParsed=False
 
+#处理参数
+if not configParsed and len(sys.argv) >3 and sys.argv[2].find("config:") >=0 and sys.argv[3].find("target:") >=0:
+    global db_host,db_port,db_user,db_passwd,db_database,need_login
+    configFileName=sys.argv[2][8:]
+    target=sys.argv[3][8:]
+    print "use config:"+ configFileName
+    cf=ConfigParser.ConfigParser()
+    cf.read(configFileName)
+    db_host=cf.get(target,"db_host")
+    db_port=int(cf.get(target,"db_port"))
+    db_user=cf.get(target,"db_user")
+    db_passwd=cf.get(target,"db_passwd")
+    db_database=cf.get(target,"db_database")
+    need_login=cf.get(target,"need_login") == 'true' or cf.get(target,"need_login") == 'True'
+    configParsed = True
+else:
+    print '''
+        usage: python server.py [port] -config:[configfile] -target:[target]
+    '''
+    sys.exit(-1)
+    
 class QueryProvider:
     def POST(self):
         data = web.input()
@@ -61,7 +86,7 @@ class AuthProvider:
         url =  web.ctx.env['QUERY_STRING']
         try:
             auth = openid.getAuth(url)
-            session['fullname']=auth['fullname']
+            web.setcookie('fullname',auth['fullname'])
         except Exception,e:
             print "auth error:"+e
         web.redirect("/")
@@ -72,11 +97,13 @@ class StaticProvider:
 
 class index:
     def GET(self):
-        fullname = session['fullname'] 
-        fullname = "mock"
-        if session is not None:
-            if fullname== '':
+        global fullname
+        fullname =''
+        if need_login and session is not None:
+            fullname = web.cookies().get('fullname')
+            if fullname is None or fullname=='' or fullname not in whiteList:
                 web.redirect(REDIRECT_URL)
+                return 
             else:
                 print 'welcome,'+fullname
         render = web.template.render('html/')

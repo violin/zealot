@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*- 
 
 import MySQLdb
-import config
 import json
 import decimal
+import server as config
 
 
 def initTables(): 
     try:
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
-
         cur=conn.cursor()
         cur.execute('show tables;')
         rows=[]
@@ -20,8 +19,10 @@ def initTables():
     except MySQLdb.Error,e:
          print "Mysql Error %d: %s" % (e.args[0], e.args[1])
     finally:
-        cur.close()
-        conn.close()
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=30):
     try:
@@ -32,7 +33,7 @@ def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=3
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
         query = 'select * from ' + tableName +' where ' + condition +' order by '+orderCondition +' limit ' +str(start) + ','+str(offset)
-        print query
+        print config.fullname+"-" +query
         cur.execute(query)
         results=[]
         for row in cur.fetchall():
@@ -54,7 +55,7 @@ def execQuery(fullQuery):
     try:
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
-        print fullQuery
+        print config.fullname+"-" +fullQuery
         cur.execute(fullQuery.encode('utf-8'))
         results=[]
         if fullQuery.find('insert')>=0 or fullQuery.find('update')>=0 or fullQuery.find('delete')>=0:
@@ -73,7 +74,7 @@ def getColumns(tableName):
         conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
         cur=conn.cursor()
         query = 'show create table ' + tableName 
-        print query
+        print config.fullname+"-" +query
         cur.execute(query)
         results=[]
         for row in cur.fetchall():
