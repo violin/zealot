@@ -114,6 +114,12 @@
 				itemVal = "\'" + itemVal + "\'";
 				newColArr.push(columnArr[i]);
 				newValArr.push(itemVal);
+			}else if(columnArr[i] == 'gmt_create' || columnArr[i] == 'gmt_Create' || columnArr[i] == 'gmt_modified' || columnArr[i] == 'gmt_Modified' ){
+				//gmt_create && gmt_modified 为空时置默认值		
+				var _tdTime = new Date();
+				itemVal = _tdTime.getTime();
+				newColArr.push(columnArr[i]);
+				newValArr.push(itemVal);
 			}
 		};
 			
@@ -122,7 +128,10 @@
 		queryWhere(null,null,false);
 		$('#inserModal').modal('hide');
 		$("#insertBtn").hide();
-		$("#view_mode").html('查看模式')
+		var view_mode_node = $("#view_mode");
+		view_mode_node.html('查看模式');
+		view_mode_node.attr('mode','view');
+		currentMode = view_mode_node.attr('mode');
 
 	})
 	//绑定查询方式按钮
