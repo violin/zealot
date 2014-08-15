@@ -89,7 +89,7 @@ class AuthProvider:
             auth = openid.getAuth(url)
             web.setcookie('fullname',auth['fullname'])
         except Exception,e:
-            print "auth error:"+e
+            print "auth error:"+str(e)
         web.redirect("/")
 
 class StaticProvider:
