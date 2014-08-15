@@ -111,15 +111,18 @@
 		for (var i = 1; i < $newValues.length; i++) {
 			itemVal = $.trim($newValues[i].value);
 			if(itemVal != ''){
+				itemVal = "\'" + itemVal + "\'";
 				newColArr.push(columnArr[i]);
 				newValArr.push(itemVal);
 			}
-			
 		};
 			
 	 	var insertquery = 'insert into '+tablename+' ('+newColArr.join(',')+')  values (seq , '+newValArr.join(',')+');'
-		execQuery(insertquery)
+		execQuery(insertquery);
 		queryWhere(null,null,false);
+		$('#inserModal').modal('hide');
+		$("#insertBtn").hide();
+		$("#view_mode").html('查看模式')
 
 	})
 	//绑定查询方式按钮
@@ -166,7 +169,8 @@
 			queryWhere(null,null,false);
 			if (currentMode=='edit') {
 				$(this).attr('mode','view')
-				$(this).html('查看模式')
+				$("#view_mode").html('查看模式')
+				$("#insertBtn").hide();
 				currentMode = $(this)
 				.attr('mode')
 			}
