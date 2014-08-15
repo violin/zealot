@@ -74,7 +74,7 @@
 			content = content.replace(tablename+',','')
 			content =content.replace(/\n/g,'<br>')
 			$('#show_create').attr("data-original-title",content)
-			$('#show_create').tooltip({html:true,trigger:'hover'})
+			$('#show_create').tooltip({html:true,trigger:'click'})
 		})
 	})	
 	//绑定编辑模式
@@ -97,21 +97,27 @@
 		var $form = $("#modalBody"), 
 		 	htm = "";
 		for (var i = 0; i < columnArr.length; i++) {
-			htm += "<label>"+columnArr[i]+"：</label><input class='form-control newItem' type='text' "+((i==0)?'disabled':'')+">";
+			htm += "<label>"+columnArr[i]+"：</label><input class='form-control newColItem' type='text' "+((i==0)?'disabled':'')+">";
 		};
 		$form.html(htm);
 
 	})
 	//保存一条新纪录
 	$("#saveNewRecord").click(function(){
-		var $newValues = $(".newItem"), 
-		 	newVal = [];
+		var $newValues = $(".newColItem"), 
+		 	newValArr = [],
+		 	newColArr = [columnArr[0]],
+		 	itemVal = '';
 		for (var i = 1; i < $newValues.length; i++) {
-			newVal.push($.trim($newValues[i].value));
+			itemVal = $.trim($newValues[i].value);
+			if(itemVal != ''){
+				newColArr.push(columnArr[i]);
+				newValArr.push(itemVal);
+			}
+			
 		};
 			
-	 	//insert into [tablename] (id ,name ,,,,,) values (seq ,'lqf',x,,,,)
-	 	var insertquery = 'insert into '+tablename+' ('+columnArr.join(',')+')  values (seq , '+newVal.join(',')+');'
+	 	var insertquery = 'insert into '+tablename+' ('+newColArr.join(',')+')  values (seq , '+newValArr.join(',')+');'
 		execQuery(insertquery)
 		queryWhere(null,null,false);
 
