@@ -21,6 +21,11 @@ in server.py I have already implemented auth function, but I removed openid.py m
 - v3.0:  whitelist, startup configurably.
 
 ### GUI
+data showing
+![data showing](http://www.pyhero.com/image_store/zealot1.png).
+
+data edit
+![data edit](http://www.pyhero.com/image_store/zealot2.png).
 
 
 
