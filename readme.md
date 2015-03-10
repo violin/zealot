@@ -2,11 +2,12 @@
 
 ### introduction
 this is a project for database basic access, with connections to netease ddb 4.5.6 , and standard Mysql 5.6.
-to use, execute: 
+
+to startup, execute: 
 ```
 python server.py [port] -config:config/config.ini -target:some-target
 ```
-whitelist.py is used for previledge ,which is now implemented with plain text fullname. future work: import encryption.
+whitelist.py is used for privilege ,which is now implemented with plain text fullname. future work: import encryption.
 
 `config/config.ini` is used for database connection configuration, which is clear enough.  
 
