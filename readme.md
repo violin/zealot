@@ -13,6 +13,8 @@ whitelist.py is used for privilege ,which is now implemented with plain text ful
 
 in server.py I have already implemented auth function, but I removed openid.py module for sake of protection of company sensitive info. other similar extention can be added as `AuthProvider` does.
 
+finally, special thanks to Fuhu Liu, QunFang Luo who contributes to the project.
+
 ### dependency
 > python, webpy, MySQLdb(with pip,easy_install or install manually)
 
