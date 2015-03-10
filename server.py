@@ -5,11 +5,10 @@ import web
 import db
 import json
 import sys,os
-import openid
+#import openid
 import tempfile
 import ConfigParser
 from whitelist import *
-import openid 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
