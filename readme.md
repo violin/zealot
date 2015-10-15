@@ -28,10 +28,10 @@ finally, special thanks to Fuhu Liu, QunFang Luo who contributes to the project.
 
 ### GUI
 data showing
-![data showing](http://www.pyhero.com/image_store/zealot1.png).
+![data showing](http://inode.top/images/show.png).
 
 data edit
-![data edit](http://www.pyhero.com/image_store/zealot2.png).
+![data edit](http://inode.top/images/edit.png).
 
 
 
