@@ -1,7 +1,7 @@
 ## zealot
 
 ### introduction
-this is a project for database basic access, with connections to netease ddb 4.5.6 , and standard Mysql 5.6.
+this is a project for database basic access, with connections to netease ddb 4.5.6 , and standard Mysql 5.5\5.6\5.7.
 
 to startup, execute: 
 ```
@@ -22,6 +22,9 @@ finally, special thanks to Fuhu Liu, QunFang Luo who contributes to the project.
 - v1.0:  base interface , view layer ,infrastructure, db query
 - v2.0:  db insert,update, table structure showing
 - v3.0:  whitelist, startup configurably.
+
+### future tasks:
+- access control by user at table dimension.
 
 ### GUI
 data showing
