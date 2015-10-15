@@ -9,7 +9,7 @@ import server as config
 
 def initTables(): 
     try:
-        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
+        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database,charset="utf8")
         cur=conn.cursor()
         cur.execute('show tables;')
         rows=[]
@@ -30,7 +30,7 @@ def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=3
             condition='1=1'
         if orderCondition == None or len(orderCondition.strip())==0 or orderCondition== 'null':
             orderCondition='id desc'
-        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
+        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database,charset="utf8")
         cur=conn.cursor()
         query = 'select * from ' + tableName +' where ' + condition +' order by '+orderCondition +' limit ' +str(start) + ','+str(offset)
         print config.fullname+"-" +query
@@ -53,7 +53,7 @@ def queryAll(tableName,condition='1=1',orderCondition='id desc',start=0,offset=3
 
 def execQuery(fullQuery):
     try:
-        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
+        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database,charset="utf8")
         cur=conn.cursor()
         print config.fullname+"-" +fullQuery
         cur.execute(fullQuery.encode('utf-8'))
@@ -71,7 +71,7 @@ def execQuery(fullQuery):
 
 def getColumns(tableName):
     try:
-        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database)
+        conn=MySQLdb.connect(host=config.db_host,user=config.db_user,passwd=config.db_passwd,port=config.db_port,db=config.db_database,charset="utf8")
         cur=conn.cursor()
         query = 'show create table ' + tableName 
         print config.fullname+"-" +query

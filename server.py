@@ -5,6 +5,7 @@ import web
 import db
 import json
 import sys,os
+from datetime import *
 #import openid
 import tempfile
 import ConfigParser
@@ -65,7 +66,7 @@ class QueryProvider:
             cols = []
             values = db.execQuery(data.condition)
         returnMap = {"v":values,"k":cols}
-        return json.dumps(returnMap)
+        return json.dumps(returnMap,cls=CJsonEncoder)
     def GET(self,param):
         return param
 
@@ -102,14 +103,25 @@ class index:
         if need_login and session is not None:
             fullname = web.cookies().get('fullname')
             if fullname is None or fullname=='' or fullname not in whiteList:
-                web.redirect(openid.REDIRECT_URL)
-                return 
+                #web.redirect(openid.REDIRECT_URL)
+                return "not authed"
             else:
                 print 'welcome,'+fullname
         render = web.template.render('html/')
         tables=db.initTables()
         return render.index(tables=tables,fullname=fullname,target=target)
 
+class CJsonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 if __name__ == "__main__":
+    print "1. check encoding..."
+    print db.execQuery("show variables like 'character_set_%';")
+    print "2. web container starting..."
     app.run()
