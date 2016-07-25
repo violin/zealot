@@ -59,13 +59,13 @@ else:
 class QueryProvider:
     def POST(self):
         data = web.input()
-        print data.condition
+        print data.condition.decode('utf8')
         if data.queryType == 'where':
-            values = db.queryAll(data.tableName, data.condition, data.orderCondition)
+            values = db.queryAll(data.tableName, data.condition.decode('utf8'), data.orderCondition)
             cols = db.getColumns(data.tableName)
         elif data.queryType == 'full':
             cols = []
-            values = db.execQuery(data.condition)
+            values = db.execQuery(data.condition.decode('utf8'))
         returnMap = {"v":values,"k":cols}
         return json.dumps(returnMap,cls=CJsonEncoder)
     def GET(self,param):
